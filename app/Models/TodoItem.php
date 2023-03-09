@@ -10,9 +10,7 @@ class TodoItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'message',
-    ];
+    protected $guarded = ['id', 'created_at'];
 
     public function user(): BelongsTo
     {

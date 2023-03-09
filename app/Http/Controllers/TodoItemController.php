@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TodoItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class TodoItemController extends Controller
@@ -14,18 +15,15 @@ class TodoItemController extends Controller
      */
     public function index(Request $request): View
     {
-        $todoItems  = TodoItem::with('user')->where('user_id', $request->user()->id)->latest()->get();
+        $todoItems  = TodoItem::with('user')
+            ->where('user_id', Auth::id())
+            ->where('archived', false)
+            ->latest()
+            ->get();
+
         return view('todoItems.index', [
             'todoItems' => $todoItems,
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -37,42 +35,21 @@ class TodoItemController extends Controller
             'message' => 'required|string|max:255',
         ]);
 
-
         $request->user()->todoItems()->create($validated);
 
         return redirect(route('todo-items.index'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TodoItem $todoItem)
+    public function archive(TodoItem $todoItem): RedirectResponse
     {
-        //
-    }
+        $todoItem->update(['archived' => true, 'archived_at' => now()]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TodoItem $todoItem)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TodoItem $todoItem)
-    {
-        //
+        return redirect(route('todo-items.index'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TodoItem $todoItem): RedirectResponse
-    {
-        $todoItem::destroy($todoItem->id);
-        return redirect(route('todo-items.index'));
-    }
+
+
 }
