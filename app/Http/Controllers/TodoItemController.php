@@ -10,9 +10,6 @@ use Illuminate\View\View;
 
 class TodoItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request): View
     {
         $todoItems  = TodoItem::with('user')
@@ -26,9 +23,6 @@ class TodoItemController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -46,10 +40,4 @@ class TodoItemController extends Controller
 
         return redirect(route('todo-items.index'));
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-
-
 }

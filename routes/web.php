@@ -20,10 +20,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::group(['middleware' => ['auth'], 'prefix' => 'profile', 'as' => 'profile.'], function () {
     Route::get('/', [ProfileController::class, 'edit'])->name('edit');
     Route::patch('/', [ProfileController::class, 'update'])->name('update');
@@ -31,10 +27,17 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'profile', 'as' => 'profile.
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('todo-items', TodoItemController::class)->only(['index', 'store']);
-    Route::delete('/todo-items/archive/{todo_item}', [TodoItemController::class, 'archive'])->name('todo-items.archive');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-    Route::group(['prefix' => 'archive', 'as' => 'archive.'], function () {
+    Route::group(['prefix' => 'todo-items', 'as' => 'todo-items.'], function () {
+        Route::get('/', [TodoItemController::class, 'index'])->name('index');
+        Route::post('/', [TodoItemController::class, 'store'])->name('store');
+        Route::delete('/{todo_item}', [TodoItemController::class, 'archive'])->name('archive');
+    });
+
+    Route::group(['prefix' => 'archive', 'as' => 'archive.', 'middleware' => ['auth', 'verified']], function () {
         Route::get('/', [ArchiveController::class, 'index'])->name('index');
         Route::put('/restore/{todo_item}', [ArchiveController::class, 'restore'])->name('restore');
         Route::delete('/{todo_item}', [ArchiveController::class, 'delete'])->name('delete');
