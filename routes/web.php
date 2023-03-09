@@ -24,7 +24,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'profile', 'as' => 'profile.'],function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'profile', 'as' => 'profile.'], function () {
     Route::get('/', [ProfileController::class, 'edit'])->name('edit');
     Route::patch('/', [ProfileController::class, 'update'])->name('update');
     Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
@@ -36,7 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::group(['prefix' => 'archive', 'as' => 'archive.'], function () {
         Route::get('/', [ArchiveController::class, 'index'])->name('index');
-        Route::post('/restore/{todo_item}', [ArchiveController::class, 'restore'])->name('restore');
+        Route::put('/restore/{todo_item}', [ArchiveController::class, 'restore'])->name('restore');
         Route::delete('/{todo_item}', [ArchiveController::class, 'delete'])->name('delete');
     });
 });

@@ -1,4 +1,10 @@
 <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Todo List') }}
+        </h2>
+    </x-slot>
+
     <div class="w-1/2 mx-auto flex-col flex p-8">
         <form method="POST" action="{{ route('todo-items.store') }}" class="w-full p-4 rounded-md bg-gray-700 flex flex-row justify-between gap-2">
             @csrf

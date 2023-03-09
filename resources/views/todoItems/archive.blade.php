@@ -1,4 +1,10 @@
 <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Archive') }}
+        </h2>
+    </x-slot>
+
     <div class="w-1/2 mx-auto flex-col flex p-8">
         <div class="flex flex-col gap-4 w-4/5 mx-auto py-4">
             @foreach ($todoItems as $todoItem)
@@ -6,14 +12,15 @@
                     <p>{{ $todoItem->message }}</p>
                     <div class="flex flex-row gap-2">
 
-                        <form method="POST" action="{{ route('archive.restore', $todoItem) }}">
+                        <form method="post" action="{{ route('archive.restore', $todoItem) }}">
+                            @method('put')
                             @csrf
                             <button type="submit" class="bg-green-600 p-1 rounded-sm font-bold">{{ __('Restore') }}</button>
                         </form>
 
                         <form method="POST" action="{{ route('archive.delete', $todoItem) }}">
-                            @csrf
                             @method('delete')
+                            @csrf
                             <button type="submit" class="bg-red-400 p-1 rounded-sm font-bold">{{ __('Delete') }}</button>
                         </form>
 
