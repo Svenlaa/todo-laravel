@@ -24,30 +24,21 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::group(['middleware' => ['auth'], 'prefix' => 'profile', 'as' => 'profile.'],function () {
+    Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+    Route::patch('/', [ProfileController::class, 'update'])->name('update');
+    Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
 });
 
-Route::resource('todo-items', TodoItemController::class)
-    ->only(['index', 'store'])
-    ->middleware(['auth', 'verified']);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('todo-items', TodoItemController::class)->only(['index', 'store']);
+    Route::delete('/todo-items/archive/{todo_item}', [TodoItemController::class, 'archive'])->name('todo-items.archive');
 
-Route::delete('/todo-items/archive/{todo_item}', [TodoItemController::class, 'archive'])
-    ->middleware(['auth', 'verified'])
-    ->name('todo-items.archive');
-
-Route::get('/archive', [ArchiveController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('archive.index');
-
-Route::delete('/archive/{todo_item}', [ArchiveController::class, 'delete'])
-    ->middleware(['auth', 'verified'])
-    ->name('archive.delete');
-
-Route::post('/archive/restore/{todo_item}', [ArchiveController::class, 'restore'])
-    ->middleware(['auth', 'verified'])
-    ->name('archive.restore');
+    Route::group(['prefix' => 'archive', 'as' => 'archive.'], function () {
+        Route::get('/', [ArchiveController::class, 'index'])->name('index');
+        Route::post('/restore/{todo_item}', [ArchiveController::class, 'restore'])->name('restore');
+        Route::delete('/{todo_item}', [ArchiveController::class, 'delete'])->name('delete');
+    });
+});
 
 require __DIR__.'/auth.php';
