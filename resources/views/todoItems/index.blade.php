@@ -13,7 +13,6 @@
         <x-primary-button class="bg-green-700 text-white">{{ __('Add') }}</x-primary-button>
         </form>
 
-
         <div class="flex flex-col gap-4 w-4/5 mx-auto py-4">
             @foreach ($todoItems as $todoItem)
                 <div class="flex bg-gray-800 p-2 rounded-sm justify-between items-center text-white">

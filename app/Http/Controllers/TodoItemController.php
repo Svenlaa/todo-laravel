@@ -12,14 +12,20 @@ class TodoItemController extends Controller
 {
     public function index(Request $request): View
     {
-        $todoItems  = TodoItem::with('user')
-            ->where('user_id', Auth::id())
+
+        $possibleSortValues = ['asc', 'desc'];
+        $sort = $request->query('sort');
+        in_array($sort, $possibleSortValues) ?  : $sort = 'asc';
+
+        $todoItems = Auth::user()
+            ->todoItems()
             ->where('archived', false)
-            ->latest()
+            ->orderBy('completed')
+            ->orderBy('created_at', $sort)
             ->get();
 
         return view('todoItems.index', [
-            'todoItems' => $todoItems,
+            'todoItems' => $todoItems
         ]);
     }
 
