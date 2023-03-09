@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [TodoItemController::class, 'index'])->name('index');
         Route::post('/', [TodoItemController::class, 'store'])->name('store');
         Route::delete('/{todo_item}', [TodoItemController::class, 'archive'])->name('archive');
+        Route::put('/{todo_item}/toggle', [TodoItemController::class, 'toggle'])->name('toggle');
     });
 
     Route::group(['prefix' => 'archive', 'as' => 'archive.', 'middleware' => ['auth', 'verified']], function () {

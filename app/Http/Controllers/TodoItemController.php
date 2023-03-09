@@ -40,4 +40,11 @@ class TodoItemController extends Controller
 
         return redirect(route('todo-items.index'));
     }
+
+    public function toggle(TodoItem $todoItem): RedirectResponse
+    {
+        $todoItem->update(["completed" => !$todoItem->completed]);
+
+        return redirect(route('todo-items.index'));
+    }
 }
