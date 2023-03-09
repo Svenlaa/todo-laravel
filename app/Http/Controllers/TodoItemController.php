@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\TodoItemController as ControllersTodoItemController;
 use App\Models\TodoItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,8 +14,9 @@ class TodoItemController extends Controller
      */
     public function index(Request $request): View
     {
+        $todoItems  = TodoItem::with('user')->where('user_id', $request->user()->id)->latest()->get();
         return view('todoItems.index', [
-            'todoItems' => TodoItem::with('user')->latest()->get(),
+            'todoItems' => $todoItems,
         ]);
     }
 
@@ -70,8 +70,9 @@ class TodoItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TodoItem $todoItem)
+    public function destroy(TodoItem $todoItem): RedirectResponse
     {
-        //
+        $todoItem::destroy($todoItem->id);
+        return redirect(route('todo-items.index'));
     }
 }
