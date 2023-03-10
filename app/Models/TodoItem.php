@@ -16,4 +16,9 @@ class TodoItem extends Model
     {
         return $this->belongsTo(User::class, 'foreign_key');
     }
+
+    public function todoList(): BelongsTo
+    {
+        return $this->belongsTo(TodoList::class, 'foreign_key');
+    }
 }
