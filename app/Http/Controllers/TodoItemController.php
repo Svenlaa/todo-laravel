@@ -31,7 +31,7 @@ class TodoItemController extends Controller
         $todoItems = $todoItemQuery->orderBy('completed')
             ->orderBy('created_at', $sort)
             ->get();
-
+        
         return view('todoItems.index', [
             'todoItems' => $todoItems
         ]);
@@ -45,20 +45,20 @@ class TodoItemController extends Controller
 
         $request->user()->todoItems()->create($validated);
 
-        return redirect(route('todo-items.index'));
+        return back();
     }
 
     public function archive(TodoItem $todoItem): RedirectResponse
     {
         $todoItem->update(['archived' => true, 'archived_at' => now()]);
 
-        return redirect(route('todo-items.index'));
+        return back();
     }
 
     public function toggle(TodoItem $todoItem): RedirectResponse
     {
         $todoItem->update(["completed" => !$todoItem->completed]);
 
-        return redirect(route('todo-items.index'));
+        return back();
     }
 }
