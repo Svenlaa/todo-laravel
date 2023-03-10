@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\TodoItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class TodoItemController extends Controller
@@ -31,7 +30,7 @@ class TodoItemController extends Controller
         $todoItems = $todoItemQuery->orderBy('completed')
             ->orderBy('created_at', $sort)
             ->get();
-        
+
         return view('todoItems.index', [
             'todoItems' => $todoItems
         ]);
@@ -54,6 +53,7 @@ class TodoItemController extends Controller
 
         return back();
     }
+
 
     public function toggle(TodoItem $todoItem): RedirectResponse
     {
