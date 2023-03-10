@@ -17,10 +17,18 @@ class TodoItemController extends Controller
         $sort = $request->query('sort');
         in_array($sort, $possibleSortValues) ?  : $sort = 'asc';
 
-        $todoItems = Auth::user()
-            ->todoItems()
-            ->where('archived', false)
-            ->orderBy('completed')
+        $possibleShowValues = ['all', 'completed', 'uncompleted'];
+        $show = $request->query('show');
+        in_array($show, $possibleShowValues) ? : $show = 'all';
+
+        $todoItemQuery = TodoItem::with('user')
+            ->where('archived', false);
+
+        if ($show !== 'all') {
+            $todoItemQuery->where('completed', $show == 'completed');
+        }
+
+        $todoItems = $todoItemQuery->orderBy('completed')
             ->orderBy('created_at', $sort)
             ->get();
 
