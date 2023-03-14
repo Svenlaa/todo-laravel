@@ -13,11 +13,12 @@ return new class extends Migration {
         Schema::create('todo_lists', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('todo_list_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
         });
 
-        Schema::table('user', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+        Schema::table('todo_items', function (Blueprint $table) {
+            $table->foreignId('todo_list_id')->constrained();
         });
     }
 

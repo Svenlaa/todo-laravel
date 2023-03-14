@@ -3,46 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\TodoItem;
+use App\Models\TodoList;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class TodoItemController extends Controller
 {
-    public function index(Request $request): View
-    {
-
-        $possibleSortValues = ['asc', 'desc'];
-        $sort = $request->query('sort');
-        in_array($sort, $possibleSortValues) ?  : $sort = 'asc';
-
-        $possibleShowValues = ['all', 'completed', 'uncompleted'];
-        $show = $request->query('show');
-        in_array($show, $possibleShowValues) ? : $show = 'all';
-
-        $todoItemQuery = TodoItem::with('user')
-            ->where('archived', false);
-
-        if ($show !== 'all') {
-            $todoItemQuery->where('completed', $show == 'completed');
-        }
-
-        $todoItems = $todoItemQuery->orderBy('completed')
-            ->orderBy('created_at', $sort)
-            ->get();
-
-        return view('todoItems.index', [
-            'todoItems' => $todoItems
-        ]);
-    }
-
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'message' => 'required|string|max:255',
         ]);
 
-        $request->user()->todoItems()->create($validated);
+
+        $validated['user_id'] = Auth::id();
+
+
+        Auth::user()
+            ->todoLists()
+            ->where('id', $request->list_id)
+            ->first()
+            ->todoItems()
+            ->create($validated);
 
         return back();
     }

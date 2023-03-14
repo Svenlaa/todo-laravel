@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TodoItemController;
+use App\Http\Controllers\TodoListController;
 use App\Http\Controllers\ArchiveController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,9 +32,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::group(['prefix' => 'todo-items', 'as' => 'todo-items.'], function () {
+    Route::group(['prefix' => 'todo', 'as' => 'todo.'], function () {
         Route::get('/', [TodoItemController::class, 'index'])->name('index');
-        Route::post('/', [TodoItemController::class, 'store'])->name('store');
+        Route::post('/{list_id}', [TodoItemController::class, 'store'])->name('store');
         Route::delete('/{todo_item}', [TodoItemController::class, 'archive'])->name('archive');
         Route::put('/{todo_item}/toggle', [TodoItemController::class, 'toggle'])->name('toggle');
     });
@@ -43,6 +44,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/restore/{todo_item}', [ArchiveController::class, 'restore'])->name('restore');
         Route::delete('/{todo_item}', [ArchiveController::class, 'delete'])->name('delete');
     });
+
+    Route::group(['prefix' => 'lists', 'as' => 'lists.', 'middleware' => ['auth', 'verified']], function () {
+        Route::get('/', [TodoListController::class, 'index'])->name('index');
+        Route::post('/', [TodoListController::class, 'store'])->name('store');
+        Route::get('/{list_id}', [TodoListController::class, 'show'])->name('show');
+    });
+
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -43,10 +43,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function todoItems(): HasMany
-    {
-        return $this->hasMany(TodoItem::class);
-    }
+//    public function todoItems(): HasMany
+//    {
+//        return $this->hasMany(TodoItem::class);
+//    }
 
     public function todoLists(): HasMany
     {

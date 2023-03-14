@@ -11,6 +11,8 @@ class TodoList extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['created_at', 'id'];
+
     public function todoItems(): HasMany
     {
         return $this->hasMany(TodoItem::class);

@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('todo-items.index') }}">
+                    <a href="{{ route('lists.index') }}">
                         <x-application-logo
                             class="block h-9 w-auto fill-current duration-200 hover:fill-[#eb4432] text-gray-800 dark:text-gray-200"/>
                     </a>
@@ -13,8 +13,8 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('todo-items.index')" :active="request()->routeIs('todo-items.index')">
-                        {{ __('Todo List') }}
+                    <x-nav-link :href="route('lists.index')" :active="request()->routeIs('lists.index')">
+                        {{ __('Todo Lists') }}
                     </x-nav-link>
                 </div>
 
