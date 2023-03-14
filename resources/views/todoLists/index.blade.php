@@ -23,6 +23,8 @@
                        class="flex flex-row items-center">
                         <p class="px-2">{{ $todoList->name }}</p>
                     </a>
+                    <a class="bg-green-600 p-1 rounded-sm font-bold"
+                       href="{{route('lists.edit', $todoList)}}">Edit</a>
                 </div>
             @endforeach
         </div>

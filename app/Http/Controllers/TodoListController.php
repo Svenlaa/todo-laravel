@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TodoList;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,5 +63,25 @@ class TodoListController extends Controller
             'todoItems' => $todoItems,
             'listName' => $todoListQuery->name
         ]);
+    }
+
+    public function edit(Request $request): View
+    {
+        $todoList = Auth::user()->todoLists()->where('id', $request->list_id)->first();
+
+        return view('todoLists.edit', ['todoList' => $todoList, 'list_id' => $request->list_id]);
+    }
+
+    public function update(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:127'
+        ]);
+
+        $todoList = Auth::user()->todoLists()->where('id', $request->list_id)->first();
+
+        $todoList->update($validated);
+
+        return redirect(route('lists.index'));
     }
 }
