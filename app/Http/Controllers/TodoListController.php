@@ -61,7 +61,8 @@ class TodoListController extends Controller
 
         return view('todoItems.index', [
             'todoItems' => $todoItems,
-            'listName' => $todoListQuery->name
+            'listName' => $todoListQuery->name,
+            'defaultView' => $show === 'all',
         ]);
     }
 
@@ -81,6 +82,18 @@ class TodoListController extends Controller
         $todoList = Auth::user()->todoLists()->where('id', $request->list_id)->first();
 
         $todoList->update($validated);
+
+        return redirect(route('lists.index'));
+    }
+
+    public function delete(Request $request): RedirectResponse
+    {
+        $todoList = TodoList::with('todoItems')->where(['id' => $request->list_id])->first();
+
+        // List isn't populated (expected)
+        if (count($todoList->todoItems) === 0) {
+            $todoList->delete();
+        }
 
         return redirect(route('lists.index'));
     }

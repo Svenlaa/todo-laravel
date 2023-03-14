@@ -35,6 +35,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::group(['prefix' => 'todo', 'as' => 'todo.'], function () {
         Route::get('/', [TodoItemController::class, 'index'])->name('index');
         Route::post('/{list_id}', [TodoItemController::class, 'store'])->name('store');
+        Route::get('/{item_id}', [TodoItemController::class, 'edit'])->name('edit');
+        Route::patch('/{item_id}', [TodoItemController::class, 'update'])->name('update');
         Route::delete('/{todo_item}', [TodoItemController::class, 'archive'])->name('archive');
         Route::put('/{todo_item}/toggle', [TodoItemController::class, 'toggle'])->name('toggle');
     });
@@ -48,9 +50,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::group(['prefix' => 'lists', 'as' => 'lists.', 'middleware' => ['auth', 'verified']], function () {
         Route::get('/', [TodoListController::class, 'index'])->name('index');
         Route::post('/', [TodoListController::class, 'store'])->name('store');
-        Route::patch('/{list_id}', [TodoListController::class, 'update'])->name('update');
-        Route::get('/{list_id}', [TodoListController::class, 'show'])->name('show');
         Route::get('/{list_id}/edit', [TodoListController::class, 'edit'])->name('edit');
+        Route::patch('/{list_id}', [TodoListController::class, 'update'])->name('update');
+        Route::delete('/{list_id}', [TodoListController::class, 'delete'])->name('delete');
+        Route::get('/{list_id}', [TodoListController::class, 'show'])->name('show');
     });
 });
 

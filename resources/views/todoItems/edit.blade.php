@@ -7,14 +7,14 @@
 
     <div class="w-1/2 mx-auto flex-col flex p-8">
         <form method="POST"
-              action="{{ route('lists.update', ['list_id' => request()->list_id]) }}"
+              action="{{ route('todo.update', ['item_id' => request()->item_id]) }}"
               class="w-full p-4 rounded-md bg-gray-700 flex flex-row justify-between gap-2">
             @csrf
             @method('patch')
-            <input type="text" name="name" class="w-full p-2 rounded-sm"
-                   placeholder="What should your list be called?" value="{{$todoList->name}}"/>
+            <input type="text" name="message" class="w-full p-2 rounded-sm"
+                   placeholder="What do you have to do?" value="{{$todoItem->message}}"/>
 
-            <x-primary-button class="bg-green-700 text-white">{{ 'Change Name!' }}</x-primary-button>
+            <x-primary-button class="bg-green-700 text-white">{{ 'Change Message!' }}</x-primary-button>
         </form>
     </div>
 </x-app-layout>

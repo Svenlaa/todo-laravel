@@ -47,7 +47,9 @@
                             </form>
                             <p @class(['px-2', 'line-through' => $todoItem->completed])>{{ $todoItem->message }}</p>
                         </div>
-                        <div>
+                        <div class="flex flex-row gap-2">
+                            <a href="{{route('todo.edit', ['item_id' => $todoItem->id])}}"
+                               class="bg-emerald-600 p-1 rounded-sm font-bold">Edit</a>
                             <form method="POST" action="{{ route('todo.archive', $todoItem) }}">
                                 @csrf
                                 @method('delete')
@@ -80,6 +82,25 @@
                     </div>
                 @endif
             @endforeach
+
+            @if(count($todoItems) === 0 && !$defaultView)
+                <div class="text-white flex flex-row justify-between"><p>This category doesn't have any items</p>
+                    <a href="{{ request()->fullUrlWithQuery(['show' => 'all']) }}"
+                       class="rounded-sm p-2 bg-blue-800 p-2 hover:brightness-110 font-bold">
+                        Show all items
+                    </a>
+                </div>
+            @endif
+
+            @if(count($todoItems) === 0 && $defaultView)
+                <div class="text-white flex flex-row justify-between"><p>This list is empty.</p>
+                    <form action="{{ route('lists.delete', ['list_id'=>request()->list_id]) }}" method="POST">
+                        @method('delete')
+                        @csrf
+                        <button class="rounded-sm p-2 bg-red-600 hover:brightness-110 font-bold">Delete List</button>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>
