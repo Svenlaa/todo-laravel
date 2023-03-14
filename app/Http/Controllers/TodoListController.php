@@ -35,7 +35,7 @@ class TodoListController extends Controller
         $sort = $request->query('sort');
         in_array($sort, $possibleSortValues) ?: $sort = 'asc';
 
-        $possibleShowValues = ['all', 'completed', 'uncompleted'];
+        $possibleShowValues = ['all', 'completed', 'uncompleted', 'archived'];
         $show = $request->query('show');
         in_array($show, $possibleShowValues) ?: $show = 'all';
 
@@ -48,10 +48,9 @@ class TodoListController extends Controller
 
         $todoItemQuery = $todoListQuery
             ->TodoItems()
-            ->where('archived', false);
+            ->where('archived', $show === 'archived');
 
-
-        if ($show !== 'all') {
+        if ($show == 'completed' || $show == 'uncompleted') {
             $todoItemQuery->where('completed', $show == 'completed');
         }
 

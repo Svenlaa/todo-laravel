@@ -24,6 +24,8 @@
                        href="{{ request()->fullUrlWithQuery(['show' => 'completed']) }}">Completed</a>
                     <a class="bg-amber-600 p-2 rounded-sm hover:brightness-110"
                        href="{{ request()->fullUrlWithQuery(['show' => 'uncompleted']) }}">Uncompleted</a>
+                    <a class="bg-red-600 p-2 rounded-sm hover:brightness-110"
+                       href="{{ request()->fullUrlWithQuery(['show' => 'archived']) }}">Archived</a>
                 </div>
                 <div class="flex flex-col lg:flex-row gap-1">
                     <a class="bg-blue-800 p-2 rounded-sm hover:brightness-110"
@@ -34,25 +36,49 @@
             </div>
 
             @foreach ($todoItems as $todoItem)
-                <div class="flex bg-gray-800 p-2 rounded-sm justify-between items-center text-white">
-                    <div class="flex flex-row items-center">
-                        <form method="POST" action="{{ route('todo.toggle', $todoItem) }}">
-                            @csrf
-                            @method('put')
-                            <button
-                                type="submit" @class(['p-1 rounded-sm font-bold font-mono', 'bg-gray-500' => $todoItem->completed, 'bg-gray-700' => !$todoItem->completed])>{{ $todoItem->completed ? "Y" : "N"  }}</button>
-                        </form>
+                @if(!$todoItem->archived)
+                    <div class="flex bg-gray-800 p-2 rounded-sm justify-between items-center text-white">
+                        <div class="flex flex-row items-center">
+                            <form method="POST" action="{{ route('todo.toggle', $todoItem) }}">
+                                @csrf
+                                @method('put')
+                                <button
+                                    type="submit" @class(['p-1 rounded-sm font-bold font-mono', 'bg-gray-500' => $todoItem->completed, 'bg-gray-700' => !$todoItem->completed])>{{ $todoItem->completed ? "Y" : "N"  }}</button>
+                            </form>
+                            <p @class(['px-2', 'line-through' => $todoItem->completed])>{{ $todoItem->message }}</p>
+                        </div>
+                        <div>
+                            <form method="POST" action="{{ route('todo.archive', $todoItem) }}">
+                                @csrf
+                                @method('delete')
+                                <button type="submit"
+                                        class="bg-red-400 p-1 rounded-sm font-bold">{{ __('Archive') }}</button>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+                @if($todoItem->archived)
+                    <div class="flex bg-gray-800 p-2 rounded-sm justify-between items-center text-white">
                         <p @class(['px-2', 'line-through' => $todoItem->completed])>{{ $todoItem->message }}</p>
+                        <div class="flex flex-row gap-2">
+
+                            <form method="post" action="{{ route('archive.restore', $todoItem) }}">
+                                @method('put')
+                                @csrf
+                                <button type="submit"
+                                        class="bg-green-600 p-1 rounded-sm font-bold">{{ __('Restore') }}</button>
+                            </form>
+
+                            <form method="POST" action="{{ route('archive.delete', $todoItem) }}">
+                                @method('delete')
+                                @csrf
+                                <button type="submit"
+                                        class="bg-red-400 p-1 rounded-sm font-bold">{{ __('Delete') }}</button>
+                            </form>
+
+                        </div>
                     </div>
-                    <div>
-                        <form method="POST" action="{{ route('todo.archive', $todoItem) }}">
-                            @csrf
-                            @method('delete')
-                            <button type="submit"
-                                    class="bg-red-400 p-1 rounded-sm font-bold">{{ __('Archive') }}</button>
-                        </form>
-                    </div>
-                </div>
+                @endif
             @endforeach
         </div>
     </div>
