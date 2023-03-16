@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\TodoItem;
-use App\Models\TodoList;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
