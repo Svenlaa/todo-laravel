@@ -66,12 +66,12 @@ class TodoListController extends Controller
             ->groupBy('archived')
             ->select('archived', DB::raw('count(*) as total')) // https://stackoverflow.com/a/62105973
             ->get();
-
+        
         return view('todoItems.index', [
             'todoItems' => $todoItems,
             'listName' => $todoListQuery->name,
             'view' => $show,
-            'itemCounts' => $itemCounts[0]
+            'itemCounts' => count($itemCounts) === 0 ? ['total' => 0, 'archived' => 0] : $itemCounts[0]
         ]);
     }
 
