@@ -93,7 +93,7 @@
                 </div>
             @endif
 
-            @if($view !== 'archived' && $itemCounts['total'] === $itemCounts['archived'] && !$itemCounts['total'] === 0)
+            @if($view !== 'archived' && $itemCounts['total'] === $itemCounts['archived'] && $itemCounts['total'] !== 0)
                 <div class="text-white flex flex-row justify-between"><p>This list is empty.</p>
                     <a href="{{ request()->fullUrlWithQuery(['show' => 'archived'])  }}" class="rounded-sm p-2
                     bg-red-600 hover:brightness-110 font-bold">Goto Archive</a>
