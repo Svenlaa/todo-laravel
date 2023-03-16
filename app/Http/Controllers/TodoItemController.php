@@ -18,14 +18,11 @@ class TodoItemController extends Controller
             'message' => 'required|string|max:255',
         ]);
 
-
         $validated['user_id'] = Auth::id();
-
 
         Auth::user()
             ->todoLists()
-            ->where('id', $request->list_id)
-            ->first()
+            ->find($request->list_id)
             ->todoItems()
             ->create($validated);
 

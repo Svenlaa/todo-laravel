@@ -41,7 +41,7 @@ class TodoListController extends Controller
         $show = $request->query('show');
         in_array($show, $possibleShowValues) ?: $show = 'all';
 
-        $todoListQuery = Auth::user()->todoLists()->where('id', $request->list_id)->first();
+        $todoListQuery = Auth::user()->todoLists()->find($request->list_id);
 
         // List not found, or not owned by User
         if ($todoListQuery === null) {
@@ -61,12 +61,12 @@ class TodoListController extends Controller
             ->get();
 
         $itemCounts = TodoList::query()
-            ->firstWhere('id', $request->list_id)
+            ->find($request->list_id)
             ->TodoItems()
             ->groupBy('archived')
             ->select('archived', DB::raw('count(*) as total')) // https://stackoverflow.com/a/62105973
             ->get();
-        
+
         return view('todoItems.index', [
             'todoItems' => $todoItems,
             'listName' => $todoListQuery->name,
@@ -77,7 +77,7 @@ class TodoListController extends Controller
 
     public function edit(Request $request): View
     {
-        $todoList = Auth::user()->todoLists()->where('id', $request->list_id)->first();
+        $todoList = Auth::user()->todoLists()->find($request->list_id);
 
         return view('todoLists.edit', ['todoList' => $todoList, 'list_id' => $request->list_id]);
     }
@@ -88,7 +88,7 @@ class TodoListController extends Controller
             'name' => 'required|string|max:127'
         ]);
 
-        $todoList = Auth::user()->todoLists()->where('id', $request->list_id)->first();
+        $todoList = Auth::user()->todoLists()->find($request->list_id);
 
         $todoList->update($validated);
 
@@ -97,7 +97,7 @@ class TodoListController extends Controller
 
     public function delete(Request $request): RedirectResponse
     {
-        $todoList = TodoList::with('todoItems')->where(['id' => $request->list_id])->first();
+        $todoList = TodoList::with('todoItems')->find($request->list_id);
 
         // List isn't populated (expected)
         if (count($todoList->todoItems) === 0) {
