@@ -44,7 +44,7 @@ class TodoItemController extends Controller
 
         $todoItem->update($validated);
 
-        return redirect(route('lists.show', ['list_id' => $todoItem->todo_list_id]));
+        return to_route('lists.show', ['list_id' => $todoItem->todo_list_id]);
     }
 
     public function archive(TodoItem $todoItem): RedirectResponse

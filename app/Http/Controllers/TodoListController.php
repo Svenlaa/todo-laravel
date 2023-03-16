@@ -44,7 +44,7 @@ class TodoListController extends Controller
 
         // List not found, or not owned by User
         if ($todoListQuery === null) {
-            return redirect(route('lists.index'));
+            return to_route('lists.index');
         }
 
         $todoItemQuery = $todoListQuery
@@ -97,7 +97,7 @@ class TodoListController extends Controller
 
         $todoList->update($validated);
 
-        return redirect(route('lists.index'));
+        return to_route('lists.index');
     }
 
     public function delete(Request $request): RedirectResponse
@@ -109,6 +109,6 @@ class TodoListController extends Controller
             $todoList->delete();
         }
 
-        return redirect(route('lists.index'));
+        return to_route('lists.index');
     }
 }
