@@ -83,16 +83,7 @@
                 @endif
             @endforeach
 
-            @if(count($todoItems) === 0 && !$defaultView)
-                <div class="text-white flex flex-row justify-between"><p>This category doesn't have any items</p>
-                    <a href="{{ request()->fullUrlWithQuery(['show' => 'all']) }}"
-                       class="rounded-sm p-2 bg-blue-800 p-2 hover:brightness-110 font-bold">
-                        Show all items
-                    </a>
-                </div>
-            @endif
-
-            @if(count($todoItems) === 0 && $defaultView)
+            @if($itemCounts['total'] === 0)
                 <div class="text-white flex flex-row justify-between"><p>This list is empty.</p>
                     <form action="{{ route('lists.delete', ['list_id'=>request()->list_id]) }}" method="POST">
                         @method('delete')
@@ -101,6 +92,15 @@
                     </form>
                 </div>
             @endif
+
+            @if($view !== 'archived' && $itemCounts['total'] === $itemCounts['archived'])
+                <div class="text-white flex flex-row justify-between"><p>This list is empty.</p>
+                    <a href="{{ request()->fullUrlWithQuery(['show' => 'archived'])  }}" class="rounded-sm p-2
+                    bg-red-600 hover:brightness-110 font-bold">Goto Archive</a>
+                </div>
+            @endif
+
+
         </div>
     </div>
 </x-app-layout>

@@ -6,6 +6,7 @@ use App\Models\TodoList;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class TodoListController extends Controller
@@ -59,10 +60,18 @@ class TodoListController extends Controller
             ->orderBy('created_at', $sort)
             ->get();
 
+        $itemCounts = TodoList::query()
+            ->firstWhere('id', $request->list_id)
+            ->TodoItems()
+            ->groupBy('archived')
+            ->select('archived', DB::raw('count(*) as total')) // https://stackoverflow.com/a/62105973
+            ->get();
+
         return view('todoItems.index', [
             'todoItems' => $todoItems,
             'listName' => $todoListQuery->name,
-            'defaultView' => $show === 'all',
+            'view' => $show,
+            'itemCounts' => $itemCounts[0]
         ]);
     }
 
