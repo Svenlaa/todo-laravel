@@ -24,8 +24,10 @@
                        href="{{ request()->fullUrlWithQuery(['show' => 'completed']) }}">Completed</a>
                     <a class="bg-amber-600 p-2 rounded-sm hover:brightness-110"
                        href="{{ request()->fullUrlWithQuery(['show' => 'uncompleted']) }}">Uncompleted</a>
-                    <a class="bg-red-600 p-2 rounded-sm hover:brightness-110"
-                       href="{{ request()->fullUrlWithQuery(['show' => 'archived']) }}">Archived</a>
+                    @if($itemCounts['archived'])
+                        <a class="bg-red-600 p-2 rounded-sm hover:brightness-110"
+                           href="{{ request()->fullUrlWithQuery(['show' => 'archived']) }}">Archived</a>
+                    @endif
                 </div>
                 <div class="flex flex-col lg:flex-row gap-1">
                     <a class="bg-blue-800 p-2 rounded-sm hover:brightness-110"
