@@ -1,7 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ 'Todo List > ' . $listName  }}
+            <a href="{{route('lists.index')}}" class="hover:brightness-110 dark:hover:brightness-90 ">Todo List</a>
+            > {{$listName}}
         </h2>
     </x-slot>
 
@@ -14,7 +15,7 @@
             <x-primary-button class="bg-green-700 text-white">{{ __('Add') }}</x-primary-button>
         </form>
 
-        <div class="flex flex-col gap-4 w-4/5 mx-auto py-4">
+        <div class="flex flex-col text-gray-800 dark:text-white gap-4 w-4/5 mx-auto py-4">
 
             <div class="flex flex-row justify-between items-center w-11/12 mx-auto text-white font-bold">
                 <div class="flex flex-col lg:flex-row gap-1">
@@ -40,7 +41,7 @@
             @foreach ($todoItems as $todoItem)
                 @if(!$todoItem->archived)
                     <div
-                        class="flex bg-white drop-shadow-md dark:bg-gray-800 p-2 rounded-sm justify-between items-center text-gray-800 dark:text-white">
+                        class="flex bg-white drop-shadow-md dark:bg-gray-800 p-2 rounded-sm justify-between items-center">
                         <div class="flex flex-row items-center">
                             <form method="POST" action="{{ route('todo.toggle', $todoItem) }}">
                                 @csrf
@@ -88,7 +89,7 @@
             @endforeach
 
             @if($itemCounts['total'] === 0)
-                <div class="text-gray-800 dark:text-white flex flex-row justify-between"><p>This list is
+                <div class="flex flex-row justify-between"><p>This list is
                         empty.</p>
                     <form action="{{ route('lists.delete', ['list_id'=>request()->list_id]) }}" method="POST">
                         @method('delete')
@@ -101,7 +102,7 @@
             @endif
 
             @if($view !== 'archived' && $itemCounts['total'] === $itemCounts['archived'] && $itemCounts['total'] !== 0)
-                <div class="text-gray-800 dark:text-white flex flex-row justify-between"><p>This list is empty.</p>
+                <div class="flex flex-row justify-between"><p>This list is empty.</p>
                     <a href="{{ request()->fullUrlWithQuery(['show' => 'archived'])  }}" class="rounded-sm p-2
                     bg-red-600 text-white hover:brightness-110 font-bold">Goto Archive</a>
                 </div>
