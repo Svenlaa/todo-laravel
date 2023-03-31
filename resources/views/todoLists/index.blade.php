@@ -7,7 +7,7 @@
 
     <div class="w-1/2 mx-auto flex-col flex p-8">
         <form method="POST" action="{{ route('lists.store') }}"
-              class="w-full p-4 rounded-md bg-gray-700 flex flex-row justify-between gap-2">
+              class="w-full p-4 rounded-md bg-white drop-shadow-md dark:bg-gray-700 flex flex-row justify-between gap-2">
             @csrf
             <input type="text" name="name" class="w-full p-2 rounded-sm"
                    placeholder="What should your list be called?"/>
@@ -18,12 +18,13 @@
         <div class="flex flex-col gap-4 w-4/5 mx-auto py-4">
 
             @foreach ($todoLists as $todoList)
-                <div class="flex bg-gray-800 p-2 rounded-sm justify-between items-center text-white">
+                <div
+                    class="flex bg-white drop-shadow-md dark:bg-gray-800 p-2 rounded-sm justify-between items-center">
                     <a href="{{ route('lists.show', ['list_id' => $todoList->id]) }}"
-                       class="flex flex-row items-center">
+                       class="flex flex-row items-center text-gray-800 dark:text-white">
                         <p class="px-2">{{ $todoList->name }}</p>
                     </a>
-                    <a class="bg-green-600 p-1 rounded-sm font-bold"
+                    <a class="bg-green-600 p-1 rounded-sm font-bold text-white"
                        href="{{route('lists.edit', $todoList)}}">Edit</a>
                 </div>
             @endforeach

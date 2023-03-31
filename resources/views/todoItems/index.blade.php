@@ -7,7 +7,7 @@
 
     <div class="w-1/2 mx-auto flex-col flex p-8">
         <form method="POST" action="{{ route('todo.store', ['list_id' => request()->list_id]) }}"
-              class="w-full p-4 rounded-md bg-gray-700 flex flex-row justify-between gap-2">
+              class="w-full p-4 rounded-md bg-white drop-shadow-md dark:bg-gray-700 flex flex-row justify-between gap-2">
             @csrf
             <input type="text" name="message" class="w-full p-2 rounded-sm" placeholder="What should be done?"/>
 
@@ -39,32 +39,34 @@
 
             @foreach ($todoItems as $todoItem)
                 @if(!$todoItem->archived)
-                    <div class="flex bg-gray-800 p-2 rounded-sm justify-between items-center text-white">
+                    <div
+                        class="flex bg-white drop-shadow-md dark:bg-gray-800 p-2 rounded-sm justify-between items-center text-gray-800 dark:text-white">
                         <div class="flex flex-row items-center">
                             <form method="POST" action="{{ route('todo.toggle', $todoItem) }}">
                                 @csrf
                                 @method('put')
                                 <button
-                                    type="submit" @class(['p-1 rounded-sm font-bold font-mono', 'bg-gray-500' => $todoItem->completed, 'bg-gray-700' => !$todoItem->completed])>{{ $todoItem->completed ? "Y" : "N"  }}</button>
+                                    type="submit" @class(['p-1 rounded-sm font-bold font-mono', 'dark:bg-gray-500 bg-gray-200' => $todoItem->completed, 'bg-gray-300 dark:bg-gray-700' => !$todoItem->completed])>{{ $todoItem->completed ? "Y" : "N"  }}</button>
                             </form>
                             <p @class(['px-2', 'line-through' => $todoItem->completed])>{{ $todoItem->message }}</p>
                         </div>
                         <div class="flex flex-row gap-2">
                             <a href="{{route('todo.edit', ['item_id' => $todoItem->id])}}"
-                               class="bg-emerald-600 p-1 rounded-sm font-bold">Edit</a>
+                               class="bg-emerald-600 text-white p-1 rounded-sm font-bold">Edit</a>
                             <form method="POST" action="{{ route('todo.archive', $todoItem) }}">
                                 @csrf
                                 @method('delete')
                                 <button type="submit"
-                                        class="bg-red-400 p-1 rounded-sm font-bold">{{ __('Archive') }}</button>
+                                        class="bg-red-400 text-white p-1 rounded-sm font-bold">{{ __('Archive') }}</button>
                             </form>
                         </div>
                     </div>
                 @endif
                 @if($todoItem->archived)
-                    <div class="flex bg-gray-800 p-2 rounded-sm justify-between items-center text-white">
+                    <div
+                        class="flex bg-white drop-shadow-md dark:bg-gray-800 p-2 rounded-sm justify-between items-center">
                         <p @class(['px-2', 'line-through' => $todoItem->completed])>{{ $todoItem->message }}</p>
-                        <div class="flex flex-row gap-2">
+                        <div class="flex flex-row gap-2 text-white">
 
                             <form method="post" action="{{ route('archive.restore', $todoItem) }}">
                                 @method('put')
@@ -86,19 +88,22 @@
             @endforeach
 
             @if($itemCounts['total'] === 0)
-                <div class="text-white flex flex-row justify-between"><p>This list is empty.</p>
+                <div class="text-gray-800 dark:text-white flex flex-row justify-between"><p>This list is
+                        empty.</p>
                     <form action="{{ route('lists.delete', ['list_id'=>request()->list_id]) }}" method="POST">
                         @method('delete')
                         @csrf
-                        <button class="rounded-sm p-2 bg-red-600 hover:brightness-110 font-bold">Delete List</button>
+                        <button class="rounded-sm p-2 bg-red-600 text-white hover:brightness-110 font-bold">Delete
+                            List
+                        </button>
                     </form>
                 </div>
             @endif
 
             @if($view !== 'archived' && $itemCounts['total'] === $itemCounts['archived'] && $itemCounts['total'] !== 0)
-                <div class="text-white flex flex-row justify-between"><p>This list is empty.</p>
+                <div class="text-gray-800 dark:text-white flex flex-row justify-between"><p>This list is empty.</p>
                     <a href="{{ request()->fullUrlWithQuery(['show' => 'archived'])  }}" class="rounded-sm p-2
-                    bg-red-600 hover:brightness-110 font-bold">Goto Archive</a>
+                    bg-red-600 text-white hover:brightness-110 font-bold">Goto Archive</a>
                 </div>
             @endif
 

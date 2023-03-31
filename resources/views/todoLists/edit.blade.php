@@ -8,7 +8,7 @@
     <div class="w-1/2 mx-auto flex-col flex p-8">
         <form method="POST"
               action="{{ route('lists.update', ['list_id' => request()->list_id]) }}"
-              class="w-full p-4 rounded-md bg-gray-700 flex flex-row justify-between gap-2">
+              class="w-full p-4 rounded-md bg-white drop-shadow-md dark:bg-gray-700 flex flex-row justify-between gap-2">
             @csrf
             @method('patch')
             <input type="text" name="name" class="w-full p-2 rounded-sm"
