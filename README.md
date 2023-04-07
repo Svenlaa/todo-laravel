@@ -16,6 +16,7 @@
 - composer
 - node 16
 - pnpm
+- MySQL
 
 ## Run locally
 
